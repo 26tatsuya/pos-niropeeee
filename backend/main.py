@@ -28,3 +28,7 @@ def get_products(code: int = Query(..., description="バーコードから読み
         return {"code": code, "name": "コーラ", "price": 120}
     else:
         raise HTTPException(status_code=404, detail="商品が見つかりませんでした")
+
+@app.post("/post-histories", summary="購入履歴登録API")
+def post_histories():
+    return {"total_amt": 0, "total_amt_notax": 0}
