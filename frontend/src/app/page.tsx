@@ -1,7 +1,16 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React from "react";
+import QrcodeReader from "./components/QrcodeReader";
+import QrcodeReaderComponent from "./components/QrcodeReaderComponent";
+
+  export default function Home() {
   return (
-    <div className="text-2xl font-bold text-blue-600">POSアプリ</div>
+    <main>
+      <div className="text-2xl font-bold text-blue-600">POSアプリ</div>
+      <div>
+        <QrcodeReaderComponent />
+      </div>
+    </main>
   );
 }
