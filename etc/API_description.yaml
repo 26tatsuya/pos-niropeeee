@@ -1,0 +1,129 @@
+# 必須：OpenAPIのバージョン情報
+openapi: 3.0.3
+
+# 必須：APIの基本情報
+info:
+  title: POSアプリAPI
+  description: POSアプリのAPI仕様です。 # 省略可
+  version: 0.0.1
+
+# サーバー情報、タグは省略可
+# servers:
+# tags:
+#   - name: user
+#     description: ユーザー情報
+
+# 必須：各エンドポイントとHTTPメソッドの定義(ここが本題)
+paths:
+  /get-products: # URLの一部になる
+    get: # リクエストメソッド
+      summary: 商品情報取得API # API名
+      description: |-
+        コードから商品マスタへ問い合わせ、該当商品の名称、コード、単価を取得します。
+        
+        該当商品がマスタにない場合は、エラーを返します。
+      parameters: # リクエストパラメータ
+      - name: code
+        description: 商品コード＝バーコードから読み取ったコード
+        in: path # [path,query]
+        required: true # 省略可
+        schema:
+          type: integer # [integer,string]
+          default: null
+          # minimum: 1 # 省略可
+      responses: # リクエストレスポンス
+        200:
+          description: 該当商品がありの場合
+          content:
+            application/json:
+              schema: # type:array=[]→items, type:object={}→properties
+                type: object
+                properties:
+                  prd_id:
+                    type: integer
+                    default: null
+                    description: 商品一意キー
+                  prd_code:
+                    type: string
+                    default: null
+                    description: 商品コード
+                  prd_name:
+                    type: string
+                    description: 商品名
+                  prd_price:
+                    type: integer
+                    default: null
+                    description: 商品単価
+        400:
+          description: Invalid status value
+        404:
+          description: "NotFound"
+          # content:
+          #   application/json:
+          #     schema:
+          #       type: "object"
+          #       properties:
+          #         status:
+          #           type: string
+          #           example: NOT_FOUND
+          #         message:
+          #           type: string
+          #           example: NOT_FOUND
+
+  /post-histories:
+    post:
+      summary: 購入履歴登録API
+      description: 購入履歴をDBへ保存します。
+      parameters:
+      requestBody:
+        required: true
+        # content:~application/json:~schema:は固定でほぼOK
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  emp_cd:
+                    type: string
+                    default: 9999999999
+                    description: "レジ担当者コード"
+                  store_cd:
+                    type: string
+                    default: 30
+                    description: "店舗コード"
+                  pos_no:
+                    type: string
+                    default: 90
+                    description: "POS機ID"
+                  prd_id:
+                    type: string
+                    description: "商品一意キー"
+                  prd_code:
+                    type: string
+                    description: "商品コード"
+                  prd_name:
+                    type: string
+                    description: "商品名称"
+                  prd_price:
+                    type: integer
+                    description: "商品単価"
+      responses: # リクエストレスポンス
+        200:
+          description: 成功時
+          content:
+            application/json:
+              schema: # type:array=[]→items, type:object={}→properties
+                type: object
+                properties:
+                  total_amt:
+                    type: integer
+                    default: 0
+                    description: 合計金額
+                  total_amt_notax:
+                    type: integer
+                    default: 0
+        400:
+          description: Invalid status value
+        
