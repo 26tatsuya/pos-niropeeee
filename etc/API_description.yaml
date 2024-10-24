@@ -43,14 +43,14 @@ paths:
                     type: integer
                     default: null
                     description: 商品一意キー
-                  prd_code:
+                  code:
                     type: string
                     default: null
                     description: 商品コード
-                  prd_name:
+                  name:
                     type: string
                     description: 商品名
-                  prd_price:
+                  price:
                     type: integer
                     default: null
                     description: 商品単価
